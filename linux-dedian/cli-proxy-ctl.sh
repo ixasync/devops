@@ -32,11 +32,11 @@ echo "Detected shell config: $shell_config_path"
 # set proxy for cli
 proxy_url="http://127.0.0.1:$port"
 if [ "$open_proxy_cli" -lt 0 ];then
-	sed -i "/http_proxy/c export http_proxy=$proxy_url"  "$shell_config_path"
-	sed -i "/https_proxy/c export https_proxy=$proxy_url" "$shell_config_path"
+	sed -i '/http_proxy/c export http_proxy="$proxy_url"'  "$shell_config_path"
+	sed -i '/https_proxy/c export https_proxy="$proxy_url"' "$shell_config_path"
 else
-	echo "export http_proxy=$proxy_url" >> "$shell_config_path"
-	echo "export https_proxy=$proxy_url" >> "$shell_config_path"
+	echo 'export http_proxy="$proxy_url"' >> "$shell_config_path"
+	echo 'export https_proxy="$proxy_url"' >> "$shell_config_path"
 fi
 
 # close proxy for localhost
