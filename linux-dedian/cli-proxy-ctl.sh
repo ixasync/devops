@@ -41,11 +41,11 @@ fi
 
 # close proxy for localhost
 if ! env|grep -q "no_proxy"; then
-	echo "export no_proxy=localhost;127.0.0.1;0.0.0.0" >> "$shell_config_path"
+	echo 'export no_proxy="localhost;127.0.0.1;0.0.0.0"' >> "$shell_config_path"
 fi
 
 if ! env|grep -q "NO_PROXY"; then
-        echo "export NO_PROXY=localhost;127.0.0.1;0.0.0.0" >> "$shell_config_path"
+        echo 'export NO_PROXY="localhost;127.0.0.1;0.0.0.0"' >> "$shell_config_path"
 fi
 
 echo "Success! Work after exec: source $shell_config_path"
