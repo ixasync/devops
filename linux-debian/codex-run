@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Documents/aiworks
+echo 'switch to aiworks'
+
+codex resume -s danger-full-access -a never
