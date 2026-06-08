@@ -1,0 +1,74 @@
+#!/bin/bash
+gits_version="1.0.0"
+
+print_version(){
+    echo "$gits_version"
+    exit 0
+}
+
+print_help(){
+    if [ -n "$1" ]; then
+        echo "Error: $1"
+    fi
+    echo ""
+    echo "gits <command> [options]"
+    echo "version: $gits_version"
+    echo "command: the command needs install before runing, exec 'gits -s xxx' for searching command provided by offical."
+    echo "options:"
+    echo "    -v/--version show version"
+    echo "    -h/--help show helps"
+    echo "    -s/--search search offical commands"
+    echo "    -c show installed commands"
+    echo ""
+    exit 0
+}
+
+
+if [ -z "$1" ]; then
+    print_help "Invalid Syntax"
+fi
+
+exec_search(){
+    echo "Waiting for support..."
+    exit 0
+}
+
+command_installed(){
+    echo "show installed commands"
+    exit 0
+}
+
+exec_command(){
+    "gits-$1" ${@:2}
+    exit 0
+}
+
+case "$1" in
+    -v)
+        print_version
+    ;;
+    --version)
+        print_version
+    ;;
+    -h)
+        print_help
+    ;;
+    --help)
+        print_help
+    ;;
+    -s)
+        exec_search "$2"
+    ;;
+    --search)
+        exec_search "$1"
+    ;;
+    -c)
+        command_installed
+    ;;
+    *)
+        if [[ "$1" == -* ]]; then
+            print_help "Invalid Syntax"
+        fi
+        exec_command ${@:1}
+    ;;
+esac
