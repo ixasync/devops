@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+SWAP_SIZE="2G"
+SWAP_PATH="/swapfile"
+
+if [ $(sudo swapon --show | wc -l) -gt 0 ]; then
+    echo "Tips, exist swap file."
+    sudo swapon --show
+    exit 0
+fi
+
+echo "step1: apply $SWAP_SIZE disk space for swaping"
+sudo fallocate -l $SWAP_SIZE $SWAP_PATH
+
+sudo chmod 600 $SWAP_PATH
+
+echo "step2: format and mount the swapfile: $SWAP_PATH"
+sudo mkswap $SWAP_PATH
+
+echo "step3: start on the mem swap"
+sudo swapon $SWAP_PATH
+
+echo "step4: config self-starton after reboot"
+if ! grep -q "$SWAP_PATH" /etc/fstab; then
+    echo "$SWAP_PATH none swap sw 0 0" | sudo tee -a /etc/fstab
+fi
+
+echo "step5: opt the swap strategies"
+sudo sed -i '/vm.swappiness/d' /etc/sysctl.conf
+sudo sed -i '/vm.vfs_cache_pressure/d' /etc/sysctl.conf
+
+echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf
+echo "vm.vfs_cache_pressure=150" | sudo tee -a /etc/sysctl.conf
+
+echo "step6: refresh linux kernel"
+sudo sysctl -p
+
+echo "=========================================="
+echo " Success to enable memory swap"
+sudo free -h
+echo "=========================================="
